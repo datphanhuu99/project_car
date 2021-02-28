@@ -22,9 +22,9 @@ extern TIM_HandleTypeDef htim1;
 //#define ki_L 0
 //#define kd_L 0
 
-#define kp_R 0
-#define ki_R 0
-#define kd_R 0     
+//#define kp_R 0
+//#define ki_R 0
+//#define kd_R 0     
 //end main.c
 //double i,d,preError,precount_L;
 void LeftMotor(int dir, int speed){

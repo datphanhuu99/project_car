@@ -124,10 +124,11 @@ uint8_t State= Straight ;
 //#define kp 2     
 //#define ki 0.004
 //#define kd 1.5
-	float kp= 0, ki=0.0,kd=0.0,LPF_Beta=0.045;
-	float error;//debug xong xoa
+	float kp_L= 4, ki_L=9.00000032e-06,kd_L=1.5;
+	float kp_R= 4, ki_R=9.00000032e-06,kd_R=1.5;
+	float error=0;//debug xong xoa
 //	float kp,ki,kd;
-	double i,d,preError=0,precount_L=0,duty_L=0,precount_R=0,duty_R=0;
+	double i_L,d_L,preError_L=0,precount_L=0,duty_L=0,i_R,d_R,preError_R=0,precount_R=0,duty_R=0;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -194,15 +195,15 @@ int main(void)
 		if(flag==1)
 		{
 			flag=0;
-			duty_L=pid_Left(speed,duty_L,kp,ki,kd);
-//			duty_R=pid_Left(speed/60,duty_R,kp,ki,kd);
-//			if(duty_R>=400)
-//			{
-//				duty_R=400;
-//			}else if(duty_R<=0)
-//			{
-//				duty_R=0;
-//			}
+			duty_L=pid_Left(speed,duty_L,kp_L,ki_L,kd_L);
+			duty_R=pid_Right(speed,duty_R,kp_R,ki_R,kd_R);
+			if(duty_R>=400)
+			{
+				duty_R=400;
+			}else if(duty_R<=0)
+			{
+				duty_R=0;
+			}
 			if(duty_L>=400)
 			{
 				duty_L=400;
@@ -211,11 +212,9 @@ int main(void)
 				duty_L=0;
 			}
 			Set_Encoder();
-//			TIM2->CNT = 32767;
-//			TIM3->CNT = 32767;
 		}
 		LeftMotor(1, duty_L);
-//		RightMotor(1, duty_R);
+		RightMotor(1, duty_R);
 //		read_encoder1= Encoder1_Get_Counter()-32767;
 //		read_encoder2= Encoder2_Get_Counter();
 		//end
@@ -555,14 +554,12 @@ double pid_Left(double speed_L, double duty_L, float kp_L, float ki_L, float kd_
 //		speed_L=speed_L/60;
 		int count_value = Encoder1_Get_Counter()-32767;
 		read_encoder1=count_value;
-//		precount_L=precount_L-(LPF_Beta*(precount_L-count_value));
-//	  count_value=precount_L;
 		error = ((speed_L)*500-count_value*10)/100;
 //		duty_L=duty_L+error*0.001;
-		i=i+error;
-		d=(error-preError);
-		duty_L=duty_L+(kp_L*error)+(ki_L*i)+(kd_L*d);
-		preError=error;
+		i_L=i_L+error;
+		d_L=(error-preError_L);
+		duty_L=duty_L+(kp_L*error)+(ki_L*i_L)+(kd_L*d_L);
+		preError_L=error;
 		//luu data
 //		data_s[ds]=ds;
 //		data_duty[ds]=duty;
@@ -576,13 +573,14 @@ double pid_Left(double speed_L, double duty_L, float kp_L, float ki_L, float kd_
 double pid_Right(double speed_R, double duty_R, float kp_R, float ki_R, float kd_R)
 {
 		int count_value = Encoder2_Get_Counter()-32767;
-		precount_R=precount_R-(LPF_Beta*(precount_R-count_value));
-	  count_value=precount_R;
-		double error = (speed_R)*5-count_value/10;
-		i=i+error;
-		d=(error-preError);
-		duty_R=duty_R+(kp_R*error)+(ki_R*i)+(kd_R*d);
-		preError=error;
+		read_encoder2=count_value;
+//		precount_R=precount_R-(LPF_Beta*(precount_R-count_value));
+//	  count_value=precount_R;
+		double error_R = ((speed_R)*50-count_value)/10;
+		i_R=i_R+error_R;
+		d_R=(error_R-preError_R);
+		duty_R=duty_R+(kp_R*error_R)+(ki_R*i_R)+(kd_R*d_R);
+		preError_R=error_R;
 		//luu data
 //		data_s[ds]=ds;
 //		data_duty[ds]=duty;

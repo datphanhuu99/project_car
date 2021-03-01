@@ -553,6 +553,7 @@ double pid_Left(double speed_L, double duty_L, float kp_L, float ki_L, float kd_
 {
 //		speed_L=speed_L/60;
 		int count_value = Encoder1_Get_Counter()-32767;
+		
 		read_encoder1=count_value;
 		error = ((speed_L)*500-count_value*10)/100;
 //		duty_L=duty_L+error*0.001;
@@ -572,7 +573,8 @@ double pid_Left(double speed_L, double duty_L, float kp_L, float ki_L, float kd_
 }
 double pid_Right(double speed_R, double duty_R, float kp_R, float ki_R, float kd_R)
 {
-		int count_value = Encoder2_Get_Counter()-32767;
+		int count_value = Encoder2_Get_Counter()-32767;// for some motor
+//		int count_value = 32767-Encoder2_Get_Counter();
 		read_encoder2=count_value;
 //		precount_R=precount_R-(LPF_Beta*(precount_R-count_value));
 //	  count_value=precount_R;

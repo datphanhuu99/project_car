@@ -40,3 +40,8 @@ stm32f103_driver\main.o: ../Core/Inc/SPI.h
 stm32f103_driver\main.o: ../Core/Inc/USART.h
 stm32f103_driver\main.o: ../Core/Inc/GPIO.h
 stm32f103_driver\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+stm32f103_driver\main.o: ../Core/Inc/ssd1306.h
+stm32f103_driver\main.o: ../Core/Inc/fonts.h
+stm32f103_driver\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+stm32f103_driver\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+stm32f103_driver\main.o: ../Core/Inc/test.h

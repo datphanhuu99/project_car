@@ -30,6 +30,9 @@
 #include "USART.h"
 #include "GPIO.h"
 #include <stdio.h>
+#include "ssd1306.h"
+#include "fonts.h"
+#include "test.h"
 /* USER CODE END Includes */
 #define Car		1
 #define tim3_encoder_read_ok	false
@@ -103,7 +106,7 @@ extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
-
+extern DMA_HandleTypeDef hdma_spi1_rx;
 //__IO int32_t Num_Encoder_1;
 /* USER CODE END PV */
 
@@ -157,9 +160,9 @@ int main(void)
   MX_TIM4_Init();
   MX_USART2_Init();
   MX_USB_PCD_Init();
-//  MX_SPI1_Init();
-
-//  MX_I2C1_Init();
+  MX_SPI1_Init();
+  MX_DMA_Init();
+  MX_I2C1_Init();
 	
 	//printf("Program's starting ...\n\r");
 
@@ -307,94 +310,94 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 //		Rx_Data[0] = 0;
 //		HAL_UART_Receive_IT(&huart2, (uint8_t*)&Rx_Data[0], 1);
 //  }
-//	if (huart->Instance == huart2.Instance)
-//	{
-//		if (aRxBuffer[RXBUFFERSIZE - 1] == 32)
-//		{
-////			speed = (int)aRxBuffer[0];    
-////			angle = (int)aRxBuffer[1];
-////			mode = (int)aRxBuffer[2];
-//			//1 vuong trai
-//			//2 vuong phai
-//			// 0 bth
-//			
-//			if(mode == Straight){
-//				angle = (angle - 50);
-//				setAngle(angle);
-//				speed = speed * 4;
-//				if(angle > 20 ){
-//					RightMotor(1, 90);
-//					LeftMotor(1, 180);
-//				}
-//				else if (angle < -20){
-//					RightMotor(1, 90);
-//					LeftMotor(1, 180);
-//				}
-//				else{
-//					RightMotor(1, 180);
-//					LeftMotor(1, 180);
-//				}
-//			}
-//			if (mode == Stop){
-//				State = Stop;
-//			}
-//			if (mode == Right){// cua phai, banh trai dem leen    en1  ab2
-//				State = Right;
-//			}
-//			if  (mode == Left){ // cua trai, banh phai dem xuong  ab1
-//				State = Left;
-//			}
+	if (huart->Instance == huart2.Instance)
+	{
+		if (aRxBuffer[RXBUFFERSIZE - 1] == 32)
+		{
+//			speed = (int)aRxBuffer[0];    
+//			angle = (int)aRxBuffer[1];
+//			mode = (int)aRxBuffer[2];
+			//1 vuong trai
+			//2 vuong phai
+			// 0 bth
+			
+			if(mode == Straight){
+				angle = (angle - 50);
+				setAngle(angle);
+				speed = speed * 4;
+				if(angle > 20 ){
+					RightMotor(1, 90);
+					LeftMotor(1, 180);
+				}
+				else if (angle < -20){
+					RightMotor(1, 90);
+					LeftMotor(1, 180);
+				}
+				else{
+					RightMotor(1, 180);
+					LeftMotor(1, 180);
+				}
+			}
+			if (mode == Stop){
+				State = Stop;
+			}
+			if (mode == Right){// cua phai, banh trai dem leen    en1  ab2
+				State = Right;
+			}
+			if  (mode == Left){ // cua trai, banh phai dem xuong  ab1
+				State = Left;
+			}
 
-//			HAL_UART_Transmit_IT(&huart2, aRxBuffer, RXBUFFERSIZE);
-//			HAL_UART_Receive_IT(&huart2, aRxBuffer, RXBUFFERSIZE);
-//		}
-//	}
+			HAL_UART_Transmit_IT(&huart2, aRxBuffer, RXBUFFERSIZE);
+			HAL_UART_Receive_IT(&huart2, aRxBuffer, RXBUFFERSIZE);
+		}
+	}
 }
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 {
-//	if (hspi->Instance == hspi1.Instance)
-//	{
-////		int co_dem;
-//			if (aRxBuffer[RXBUFFERSIZE - 1] == 32)
-//		{
-////			speed = (int)aRxBuffer[0];
-////			angle = (int)aRxBuffer[1];
-////			mode = (int)aRxBuffer[2];
-//			//1 vuong trai
-//			//2 vuong phai
-//			// 0 bth
-//			
-//			if(mode == Straight){
-//				angle = (angle - 50);
-//				setAngle(angle);
-//				speed = speed * 4;
-//				if(angle > 20 ){
-//					RightMotor(1, 90);
-//					LeftMotor(1, 180);
-//				}
-//				else if (angle < -20){
-//					RightMotor(1, 90);
-//					LeftMotor(1, 180);
-//				}
-//				else{
-//					RightMotor(1, 180);
-//					LeftMotor(1, 180);
-//				}
-//			}
-//			if (mode == Stop){
-//				State = Stop;
-//			}
-//			if (mode == Right){// cua phai, banh trai dem leen    en1  ab2
-//				State = Right;
-//			}
-//			if  (mode == Left){ // cua trai, banh phai dem xuong  ab1
-//				State = Left;
-//			}
-////			HAL_UART_Transmit_IT(&huart2, aRxBuffer, RXBUFFERSIZE);
-////			HAL_UART_Receive_IT(&huart2, aRxBuffer, RXBUFFERSIZE);
-//		}
-//		
-//	}
+	if (hspi->Instance == hspi1.Instance)
+	{
+//		int co_dem;
+			if (aRxBuffer[RXBUFFERSIZE - 1] == 32)
+		{
+//			speed = (int)aRxBuffer[0];
+//			angle = (int)aRxBuffer[1];
+//			mode = (int)aRxBuffer[2];
+			//1 vuong trai
+			//2 vuong phai
+			// 0 bth
+			
+			if(mode == Straight){
+				angle = (angle - 50);
+				setAngle(angle);
+				speed = speed * 4;
+				if(angle > 20 ){
+					RightMotor(1, 90);
+					LeftMotor(1, 180);
+				}
+				else if (angle < -20){
+					RightMotor(1, 90);
+					LeftMotor(1, 180);
+				}
+				else{
+					RightMotor(1, 180);
+					LeftMotor(1, 180);
+				}
+			}
+			if (mode == Stop){
+				State = Stop;
+			}
+			if (mode == Right){// cua phai, banh trai dem leen    en1  ab2
+				State = Right;
+			}
+			if  (mode == Left){ // cua trai, banh phai dem xuong  ab1
+				State = Left;
+			}
+//			HAL_UART_Transmit_IT(&huart2, aRxBuffer, RXBUFFERSIZE);
+//			HAL_UART_Receive_IT(&huart2, aRxBuffer, RXBUFFERSIZE);
+		}
+		
+	}
 }
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {

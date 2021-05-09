@@ -15,8 +15,8 @@
 #define	Back		0
 #define Forward	1
 
-#define Length  					16.5
-#define Width   					19
+#define Length_M  					16.5
+#define Width_M   					19
 #define Max_Angle  				55
 #define PI      					3.14159
 #define WheelSize					18.8

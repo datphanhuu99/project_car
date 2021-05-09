@@ -42,9 +42,9 @@ void RunLeft90 (int anggle, int speed){
 	uint32_t Num_Encoder_pre = 0, Num_Encoder_next = 0;
 	
 	double a = tan (anggle * AngleServoRatio* PI / 180);	
-	float SpeedRatioCalculator = (Length / a)/((Length / a) + Width);
-	float GetLargerDistance = ((Length / a) + Width)*PI/2;
-	float GetSmallerDistance = (Length / a)*PI/2;
+	float SpeedRatioCalculator = (Length_M / a)/((Length_M / a) + Width_M);
+	float GetLargerDistance = ((Length_M / a) + Width_M)*PI/2;
+	float GetSmallerDistance = (Length_M / a)*PI/2;
 	float GetRound = GetLargerDistance/WheelSize;
 	float GetFreq = GetRound*Duty_Per_Round;
 	
@@ -70,9 +70,9 @@ void RunRight90 (int anggle, int speed){
 	
 	uint32_t Num_Encoder_pre = 0, Num_Encoder_next = 0;
 	double a = tan (anggle * AngleServoRatio* PI / 180);	
-	float SpeedRatioCalculator = (Length / a)/((Length / a) + Width);
-	float GetLargerDistance = ((Length / a) + Width)*PI/2;
-//	float GetSmallerDistance = (Length / a)*PI/2;
+	float SpeedRatioCalculator = (Length_M / a)/((Length_M / a) + Width_M);
+	float GetLargerDistance = ((Length_M / a) + Width_M)*PI/2;
+//	float GetSmallerDistance = (Length_M / a)*PI/2;
 	float GetRound = GetLargerDistance/WheelSize ;
 	float GetFreq = GetRound*Duty_Per_Round;	
 	
@@ -159,7 +159,7 @@ void setAngle(int8_t angle)
 	}
 	Servo_Pulse = Timer_Servo_Center + angle * Timer_Servo_Step_Angle;
 	TIM4->CCR1 = Servo_Pulse;
-//	setPWM(&htim4, TIM_CHANNEL_1, Timer_Servo_Period, Servo_Pulse);
+	setPWM(&htim4, TIM_CHANNEL_1, Timer_Servo_Period, Servo_Pulse);
 }
 void Set_Encoder(void)
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {
@@ -168,7 +168,7 @@ void Set_Encoder(void)
 }
 void Run(int8_t angle, uint8_t speed){
 	double a = tan (angle * AngleServoRatio* PI / 180);	
-	float SpeedRatioCalculator = (Length / a)/((Length / a) + Width);
+	float SpeedRatioCalculator = (Length_M / a)/((Length_M / a) + Width_M);
 	if(angle < 0){
 		setAngle(angle*Left_Ratio);
 		RightMotor(Forward, speed);

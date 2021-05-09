@@ -144,7 +144,7 @@ uint8_t State= Straight ;
   * @retval int
   */
 int main(void)
-{
+	{
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
@@ -180,7 +180,14 @@ int main(void)
 //	LeftMotor(0,300);
 //	RightMotor(0,300);
 	printf("Start ... %d\t%d\n\r", Encoder1_Get_Counter(),Encoder2_Get_Counter());
-	
+	//code oled begin
+	SSD1306_Init (); // initialize the display 
+	SSD1306_GotoXY (10,10); // goto 10, 10 
+	SSD1306_Puts ("HELLO", &Font_11x18, 1); // print Hello 
+	SSD1306_GotoXY (10, 30); 
+	SSD1306_Puts ("WORLD !!", &Font_11x18, 1); 
+	SSD1306_UpdateScreen(); // update screen
+	//code oled end
   while (1){
 //		printf("Program's running ... %d\t    %d\n\r", Encoder1_Get_Counter(),Encoder2_Get_Counter());
 		switch (State){
@@ -218,6 +225,7 @@ int main(void)
 		}
 		LeftMotor(1, duty_L);
 		RightMotor(1, duty_R);
+		setAngle(angle);
 //		read_encoder1= Encoder1_Get_Counter()-32767;
 //		read_encoder2= Encoder2_Get_Counter();
 		//end
@@ -314,8 +322,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	{
 		if (aRxBuffer[RXBUFFERSIZE - 1] == 32)
 		{
-//			speed = (int)aRxBuffer[0];    
-//			angle = (int)aRxBuffer[1];
+			speed = (float)aRxBuffer[0]/10;    
+			angle = (int)aRxBuffer[1];
 //			mode = (int)aRxBuffer[2];
 			//1 vuong trai
 			//2 vuong phai

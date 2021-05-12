@@ -242,7 +242,7 @@ void setPWM(TIM_HandleTypeDef *htim, uint32_t channel, uint32_t period, uint32_t
 	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
 	HAL_TIM_PWM_ConfigChannel(htim, &sConfigOC, channel);
 	HAL_TIM_PWM_Start_IT(htim, channel);// start pwm generation
-	//HAL_TIM_Base_Start_IT(htim);
+//	HAL_TIM_Base_Start_IT(htim);
 }
 
 

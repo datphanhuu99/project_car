@@ -48,7 +48,7 @@ uint8_t Rx_Index = 0;
 
 #define RXBUFFERSIZE 4
 uint8_t aRxBuffer[RXBUFFERSIZE];
-volatile int  angle, mode;
+volatile int   angle,mode;
 double speed;
 /* USER CODE END PTD */
 //#define Left	1
@@ -171,14 +171,6 @@ int main(void)
 	HAL_UART_Receive_IT(&huart2, aRxBuffer, RXBUFFERSIZE);
 	HAL_SPI_Receive_DMA(&hspi1,aRxBuffer,RXBUFFERSIZE);
 	setAngle(0);
-//	LeftMotor(1,300);
-//	RightMotor(1,300);
-
-////	HAL_Delay(1000);
-////	setAngle(-20);
-//	HAL_Delay(1000);
-//	LeftMotor(0,300);
-//	RightMotor(0,300);
 	printf("Start ... %d\t%d\n\r", Encoder1_Get_Counter(),Encoder2_Get_Counter());
 	//code oled begin
 	SSD1306_Init (); // initialize the display 
@@ -190,17 +182,17 @@ int main(void)
 	//code oled end
   while (1){
 //		printf("Program's running ... %d\t    %d\n\r", Encoder1_Get_Counter(),Encoder2_Get_Counter());
-		switch (State){
-			case Left: RunLeft(); break;
-			case Right: RunRight(); break;
-			case Stop: 
-					setAngle(0);
-					LeftMotor(0,0);
-					RightMotor(0,0);
-					break;
-			default: break;
-				
-		}
+//		switch (State){
+//			case Left: RunLeft(); break;
+//			case Right: RunRight(); break;
+//			case Stop: 
+//					setAngle(0);
+//					LeftMotor(0,0);
+//					RightMotor(0,0);
+//					break;
+//			default: break;
+//				
+//		}
 		//add by dat
 		if(flag==1)
 		{
@@ -225,7 +217,7 @@ int main(void)
 		}
 		LeftMotor(1, duty_L);
 		RightMotor(1, duty_R);
-		setAngle(angle);
+		setAngle(20);
 //		read_encoder1= Encoder1_Get_Counter()-32767;
 //		read_encoder2= Encoder2_Get_Counter();
 		//end
@@ -417,6 +409,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			flag=1;
 			count_tim=0;
 		}
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_1, GPIO_PIN_SET);
 	}
 }
 /* USER CODE BEGIN 4 */
